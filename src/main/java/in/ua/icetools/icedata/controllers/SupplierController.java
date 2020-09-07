@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.net.URL;
 import java.util.List;
 
 @RestController
@@ -34,12 +35,22 @@ public class SupplierController {
         return supplierRepository.findAll();
     }
 
-    @GetMapping("/suppliers/debug/{param}")
+    /*@GetMapping("/suppliers/debug/{param}")
     public ResponseEntity<String> checkDebug(@PathVariable(value = "param") String debug) {
         if (debug.equals("1")) {
             return ResponseEntity.ok().body(SupplierProcessor.process());
         } else {
             return ResponseEntity.badRequest().body("Bad Request");
+        }
+    }*/
+
+    @GetMapping("/suppliers/initSuppliers")
+    public void initSuppliers() {
+        try {
+            SupplierProcessor processor = new SupplierProcessor(supplierRepository);
+            processor.process(new URL("https://data.icecat.biz/export/freexml/refs/SuppliersList.xml.gz"));
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }
