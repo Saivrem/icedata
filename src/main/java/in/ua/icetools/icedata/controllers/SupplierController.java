@@ -10,7 +10,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 @RestController
 @RequestMapping("api/v1")
@@ -19,38 +21,57 @@ public class SupplierController {
     @Autowired
     private SupplierRepository supplierRepository;
 
-    @PostMapping("/suppliers")
-    public Supplier createSupplier(@Valid @RequestBody Supplier supplier) {
-        return supplierRepository.save(supplier);
+    @GetMapping("/suppliers")
+    public List<Supplier> getAllSuppliers() {
+        return supplierRepository.findAll();
     }
 
-    @GetMapping("/suppliers/{id}")
+    @GetMapping("/suppliers/id={id}")
     public ResponseEntity<Supplier> getSupplierById(@PathVariable(value = "id") Long supplier_id) throws ResourceNotFoundException {
         Supplier supplier = supplierRepository.findById(supplier_id).orElseThrow(() -> new ResourceNotFoundException("User not found for this id :: " + supplier_id));
         return ResponseEntity.ok().body(supplier);
     }
 
-    @GetMapping("/suppliers")
-    public List<Supplier> getAllUsers() {
-        return supplierRepository.findAll();
+    @GetMapping("/suppliers/batch={string}")
+    public ResponseEntity<List<Supplier>> getSuppliersInBatch(@PathVariable(value = "string") String line) {
+        List<Long> ids = new ArrayList<>();
+        for (String str : line.split(",")) {
+            ids.add(Long.parseLong(str));
+        }
+        List<Supplier> resultList = supplierRepository.findAllById(ids);
+        return ResponseEntity.ok().body(resultList);
     }
 
-    /*@GetMapping("/suppliers/debug/{param}")
-    public ResponseEntity<String> checkDebug(@PathVariable(value = "param") String debug) {
-        if (debug.equals("1")) {
-            return ResponseEntity.ok().body(SupplierProcessor.process());
-        } else {
-            return ResponseEntity.badRequest().body("Bad Request");
-        }
-    }*/
+    @PostMapping("/suppliers")
+    public ResponseEntity<List<Supplier>> getSuppliersById(@Valid @RequestBody List<Long> ids) {
+        List<Supplier> resultList = supplierRepository.findAllById(ids);
+        return ResponseEntity.ok().body(resultList);
+    }
 
-    @GetMapping("/suppliers/initSuppliers")
-    public void initSuppliers() {
+    @PostMapping("/suppliers/initSuppliers")
+    public ResponseEntity<String> initSuppliers(@Valid @RequestBody Properties properties) {
+
+        String response = "Something went wrong";
         try {
-            SupplierProcessor processor = new SupplierProcessor(supplierRepository);
-            processor.process(new URL("https://data.icecat.biz/export/freexml/refs/SuppliersList.xml.gz"));
+            SupplierProcessor processor = new SupplierProcessor(
+                    supplierRepository,
+                    properties.getProperty("userName"),
+                    properties.getProperty("passWord")
+            );
+            response = processor.process(new URL(properties.getProperty("url")));
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return ResponseEntity.ok().body(response);
+    }
+
+    @PutMapping("/suppliers")
+    public Supplier createSupplier(@Valid @RequestBody Supplier supplier) {
+        return supplierRepository.save(supplier);
+    }
+
+    @DeleteMapping("/suppliers/id={id}")
+    public void deleteById(@PathVariable(value = "id") Long supplier_id) {
+        supplierRepository.deleteById(supplier_id);
     }
 }

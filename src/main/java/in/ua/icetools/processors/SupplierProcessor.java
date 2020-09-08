@@ -17,18 +17,18 @@ public class SupplierProcessor {
 
     private final SupplierRepository supplierRepository;
 
-    public SupplierProcessor(SupplierRepository supplierRepository) {
+    public SupplierProcessor(SupplierRepository supplierRepository, String userName, String passWord) {
         this.supplierRepository = supplierRepository;
-    }
-
-    public void process(URL url) throws Exception {
-
         Authenticator.setDefault(new Authenticator() {
             @Override
             protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication("username", "password".toCharArray());
+                return new PasswordAuthentication(userName, passWord.toCharArray());
             }
         });
+    }
+
+    public String process(URL url) throws Exception {
+
         url.openConnection();
         File suppliersFile = new File("path1");
         try (InputStream stream = url.openStream()) {
@@ -61,18 +61,18 @@ public class SupplierProcessor {
                 counter++;
 
                 if (counter % 10 == 0) {
-                    System.out.printf("\rProcessed %d suppliers", counter);
+                    System.out.printf("\rRead %d suppliers", counter);
                 }
             }
         }
 
-        System.out.printf("\rProcessed %d suppliers", counter);
+        System.out.printf("\rRead %d suppliers\n", counter);
         resultFile.delete();
         suppliersFile.delete();
 
         supplierRepository.saveAll(supplierList);
 
-        System.out.printf("%d suppliers processed\n", counter);
+        return String.format("%d suppliers saved to DB", counter);
 
     }
 
