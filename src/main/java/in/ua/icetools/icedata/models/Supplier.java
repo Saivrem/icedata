@@ -12,11 +12,11 @@ public class Supplier {
     @Id
     @Column(name = "supplier_id", unique = true, nullable = false)
     private Long supplier_id;
-    @Column(name = "supplier_name", unique = false, nullable = false)
+    @Column(name = "supplier_name", nullable = false)
     private String supplier_name;
-    @Column(name = "is_sponsor", unique = false, nullable = false)
+    @Column(name = "is_sponsor", nullable = false)
     private int is_sponsor;
-    @Column(name = "brand_logo", unique = false, nullable = false)
+    @Column(name = "brand_logo", nullable = false)
     private String brand_logo;
 
     public Supplier() {

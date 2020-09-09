@@ -15,24 +15,30 @@ import java.util.List;
 import java.util.Properties;
 
 @RestController
-@RequestMapping("api/v1")
+@RequestMapping("api/v1/suppliers")
 public class SupplierController {
 
     @Autowired
     private SupplierRepository supplierRepository;
 
-    @GetMapping("/suppliers")
+    @GetMapping("/")
     public List<Supplier> getAllSuppliers() {
         return supplierRepository.findAll();
     }
 
-    @GetMapping("/suppliers/id={id}")
+    @GetMapping("/id={id}")
     public ResponseEntity<Supplier> getSupplierById(@PathVariable(value = "id") Long supplier_id) throws ResourceNotFoundException {
-        Supplier supplier = supplierRepository.findById(supplier_id).orElseThrow(() -> new ResourceNotFoundException("User not found for this id :: " + supplier_id));
+        Supplier supplier = supplierRepository.findById(supplier_id).orElseThrow(() -> new ResourceNotFoundException("Supplier not found for this id :: " + supplier_id));
         return ResponseEntity.ok().body(supplier);
     }
 
-    @GetMapping("/suppliers/batch={string}")
+    @GetMapping("/name={name}")
+    public ResponseEntity<List<Supplier>> getSupplierByName(@PathVariable(value = "name") String supplierName) {
+        List<Supplier> suppliers = supplierRepository.findSupplierByName(supplierName);
+        return ResponseEntity.ok().body(suppliers);
+    }
+
+    @GetMapping("/batch={string}")
     public ResponseEntity<List<Supplier>> getSuppliersInBatch(@PathVariable(value = "string") String line) {
         List<Long> ids = new ArrayList<>();
         for (String str : line.split(",")) {
@@ -42,13 +48,13 @@ public class SupplierController {
         return ResponseEntity.ok().body(resultList);
     }
 
-    @PostMapping("/suppliers")
+    @PostMapping("/")
     public ResponseEntity<List<Supplier>> getSuppliersById(@Valid @RequestBody List<Long> ids) {
         List<Supplier> resultList = supplierRepository.findAllById(ids);
         return ResponseEntity.ok().body(resultList);
     }
 
-    @PostMapping("/suppliers/initSuppliers")
+    @PostMapping("/initSuppliers")
     public ResponseEntity<String> initSuppliers(@Valid @RequestBody Properties properties) {
 
         String response = "Something went wrong";
@@ -65,12 +71,12 @@ public class SupplierController {
         return ResponseEntity.ok().body(response);
     }
 
-    @PutMapping("/suppliers")
+    @PutMapping("/")
     public Supplier createSupplier(@Valid @RequestBody Supplier supplier) {
         return supplierRepository.save(supplier);
     }
 
-    @DeleteMapping("/suppliers/id={id}")
+    @DeleteMapping("/id={id}")
     public void deleteById(@PathVariable(value = "id") Long supplier_id) {
         supplierRepository.deleteById(supplier_id);
     }
