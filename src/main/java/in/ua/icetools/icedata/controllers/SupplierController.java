@@ -21,7 +21,7 @@ public class SupplierController {
     @Autowired
     private SupplierRepository supplierRepository;
 
-    @GetMapping("/")
+    @GetMapping("/all")
     public List<Supplier> getAllSuppliers() {
         return supplierRepository.findAll();
     }
@@ -38,7 +38,7 @@ public class SupplierController {
         return ResponseEntity.ok().body(suppliers);
     }
 
-    @GetMapping("/batch={string}")
+    @GetMapping("/ids={string}")
     public ResponseEntity<List<Supplier>> getSuppliersInBatch(@PathVariable(value = "string") String line) {
         List<Long> ids = new ArrayList<>();
         for (String str : line.split(",")) {
