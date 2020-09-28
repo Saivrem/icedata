@@ -3,18 +3,21 @@ package in.ua.icetools.icedata.processors;
 import in.ua.icetools.icedata.models.Supplier;
 import in.ua.icetools.icedata.resources.SupplierRepository;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.net.Authenticator;
 import java.net.PasswordAuthentication;
 import java.net.URL;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.zip.GZIPInputStream;
 
-import static in.ua.icetools.icedata.processors.Utils.readAttribute;
+import static in.ua.icetools.icedata.processors.Utils.*;
 
+/**
+ * Processor for SuppliersList.xml file.
+ */
 public class SupplierProcessor {
 
     private final SupplierRepository supplierRepository;
@@ -29,21 +32,22 @@ public class SupplierProcessor {
         });
     }
 
+    /**
+     * The only meaningful method for any Processor, probably I should make them an interface in the future.
+     *
+     * @param url URL object with the file (TODO move to CONSTANTS class);
+     * @return String with the response, Either everything went good or not
+     * @throws Exception One of many possible exceptions (TODO Think about it)
+     */
     public String process(URL url) throws Exception {
-
-        url.openConnection();
+        //TODO rework path1 and path2 to be temporary files in system native TMP dir
         File suppliersFile = new File("path1");
-        try (InputStream stream = url.openStream()) {
-            Files.copy(stream, suppliersFile.toPath());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
+        downloadURL(url, suppliersFile);
+
         File resultFile = new File("path2");
-        try (GZIPInputStream gzipInputStream = new GZIPInputStream(new FileInputStream(suppliersFile))) {
-            Files.copy(gzipInputStream, resultFile.toPath());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
+        unGzip(suppliersFile, resultFile);
 
         BufferedReader reader = new BufferedReader(new FileReader(resultFile));
         int counter = 0;
@@ -69,12 +73,16 @@ public class SupplierProcessor {
         }
 
         System.out.printf("\rRead %d suppliers\n", counter);
+
         resultFile.delete();
         suppliersFile.delete();
 
         supplierRepository.saveAll(supplierList);
 
+        //This could be actually a lie, think how to provide valid data.
         return String.format("%d suppliers saved to DB", counter);
 
     }
+
+
 }

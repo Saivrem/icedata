@@ -3,15 +3,17 @@ package in.ua.icetools.icedata.processors;
 import in.ua.icetools.icedata.models.SupplierMapping;
 import in.ua.icetools.icedata.resources.SupplierMappingRepository;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.net.Authenticator;
 import java.net.PasswordAuthentication;
 import java.net.URL;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedHashMap;
 
+import static in.ua.icetools.icedata.processors.Utils.downloadURL;
 import static in.ua.icetools.icedata.processors.Utils.readAttribute;
 
 public class SupplierMappingProcessor {
@@ -33,15 +35,11 @@ public class SupplierMappingProcessor {
         repository.truncate();
 
         //url.openConnection();
-        File suppliersFile = new File("suppliersFile");
+        File supplierMappingsFile = new File("supplierMappingsFile");
         int totalCounter = 0;
-        try (InputStream stream = url.openStream()) {
-            Files.copy(stream, suppliersFile.toPath());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        downloadURL(url, supplierMappingsFile);
 
-        try (BufferedReader reader = new BufferedReader(new FileReader(suppliersFile))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(supplierMappingsFile))) {
             boolean item = false;
             int supplierId = 0;
             int counter = 0;
@@ -81,7 +79,7 @@ public class SupplierMappingProcessor {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        suppliersFile.delete();
+        supplierMappingsFile.delete();
         System.out.println("\nend " + new Date().toString());
         return String.format("%d supplier mappings saved to repository", totalCounter);
     }
