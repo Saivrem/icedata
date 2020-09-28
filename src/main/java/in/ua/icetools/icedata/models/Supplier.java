@@ -10,55 +10,55 @@ import javax.persistence.Table;
 public class Supplier {
 
     @Id
-    @Column(name = "supplier_id", unique = true, nullable = false)
-    private Long supplier_id;
-    @Column(name = "supplier_name", nullable = false)
-    private String supplier_name;
-    @Column(name = "is_sponsor", nullable = false)
-    private int is_sponsor;
-    @Column(name = "brand_logo", nullable = false)
-    private String brand_logo;
+    @Column(name = "supplier_id", unique = true)
+    private Long supplierId;
+    @Column(name = "supplier_name")
+    private String supplierName;
+    @Column(name = "is_sponsor")
+    private int isSponsor;
+    @Column(name = "brand_logo")
+    private String brandLogo;
 
     public Supplier() {
     }
 
-    public Supplier(Long supplier_id, String supplier_name, int is_sponsor, String brand_logo) {
-        this.supplier_id = supplier_id;
-        this.supplier_name = supplier_name;
-        this.is_sponsor = is_sponsor;
-        this.brand_logo = brand_logo;
+    public Supplier(Long supplierId, String supplierName, int isSponsor, String brandLogo) {
+        this.supplierId = supplierId;
+        this.supplierName = supplierName;
+        this.isSponsor = isSponsor;
+        this.brandLogo = brandLogo;
     }
 
-    public String getSupplier_name() {
-        return supplier_name;
+    public String getSupplierName() {
+        return supplierName;
     }
 
-    public void setSupplier_name(String supplier_name) {
-        this.supplier_name = supplier_name;
+    public void setSupplierName(String supplier_name) {
+        this.supplierName = supplier_name;
     }
 
-    public int getIs_sponsor() {
-        return is_sponsor;
+    public int getIsSponsor() {
+        return isSponsor;
     }
 
-    public void setIs_sponsor(int is_sponsor) {
-        this.is_sponsor = is_sponsor;
+    public void setIsSponsor(int is_sponsor) {
+        this.isSponsor = is_sponsor;
     }
 
-    public String getBrand_logo() {
-        return brand_logo;
+    public String getBrandLogo() {
+        return brandLogo;
     }
 
-    public void setBrand_logo(String brand_logo) {
-        this.brand_logo = brand_logo;
+    public void setBrandLogo(String brand_logo) {
+        this.brandLogo = brand_logo;
     }
 
-    public void setSupplier_id(Long supplier_id) {
-        this.supplier_id = supplier_id;
+    public Long getSupplierId() {
+        return supplierId;
     }
 
-    public Long getSupplier_id() {
-        return supplier_id;
+    public void setSupplierId(Long supplier_id) {
+        this.supplierId = supplier_id;
     }
 
 

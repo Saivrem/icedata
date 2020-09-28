@@ -1,4 +1,4 @@
-package in.ua.icetools.processors;
+package in.ua.icetools.icedata.processors;
 
 import in.ua.icetools.icedata.models.Supplier;
 import in.ua.icetools.icedata.resources.SupplierRepository;
@@ -12,6 +12,8 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.zip.GZIPInputStream;
+
+import static in.ua.icetools.icedata.processors.Utils.readAttribute;
 
 public class SupplierProcessor {
 
@@ -52,10 +54,10 @@ public class SupplierProcessor {
             if (line.startsWith("<Supplier ")) {
                 LinkedHashMap<String, String> attributes = readAttribute(line);
                 Supplier supplier = new Supplier();
-                supplier.setBrand_logo(attributes.get("LogoOriginal") != null ? attributes.get("LogoOriginal") : "");
-                supplier.setIs_sponsor(attributes.get("Sponsor") != null ? Integer.parseInt(attributes.get("Sponsor")) : 0);
-                supplier.setSupplier_id(Long.parseLong(attributes.get("ID")));
-                supplier.setSupplier_name(attributes.get("Name"));
+                supplier.setBrandLogo(attributes.get("LogoOriginal") != null ? attributes.get("LogoOriginal") : "");
+                supplier.setIsSponsor(attributes.get("Sponsor") != null ? Integer.parseInt(attributes.get("Sponsor")) : 0);
+                supplier.setSupplierId(Long.parseLong(attributes.get("ID")));
+                supplier.setSupplierName(attributes.get("Name"));
                 supplierList.add(supplier);
 
                 counter++;
@@ -75,43 +77,4 @@ public class SupplierProcessor {
         return String.format("%d suppliers saved to DB", counter);
 
     }
-
-    public static LinkedHashMap<String, String> readAttribute(String line) {
-
-        char[] array = line.toCharArray();
-        LinkedHashMap<String, String> attributes = new LinkedHashMap<>();
-        StringBuilder name = new StringBuilder();
-        StringBuilder value = new StringBuilder();
-        boolean isName = true;
-        boolean opening = true;
-        boolean isValue = false;
-        for (int i = 0; i < array.length; i++) {
-            if (opening) {
-                opening = !(array[i] == ' ');
-            } else {
-                if (isName) {
-                    if (array[i] != '=') {
-                        name.append(array[i]);
-                    } else {
-                        isName = false;
-                    }
-                } else {
-                    if ((array[i] == '\"') && !isValue) {
-                        isValue = true;
-                    } else if ((array[i] == '\"') && isValue) {
-                        isName = true;
-                        isValue = false;
-                        attributes.put(name.toString().trim(), value.toString().replaceAll("\"", "").trim());
-                        name = new StringBuilder();
-                        value = new StringBuilder();
-                    } else {
-                        value.append(array[i]);
-                    }
-                }
-            }
-        }
-        return attributes;
-    }
-
-
 }

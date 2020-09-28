@@ -2,8 +2,8 @@ package in.ua.icetools.icedata.controllers;
 
 import in.ua.icetools.icedata.exceptions.ResourceNotFoundException;
 import in.ua.icetools.icedata.models.Supplier;
+import in.ua.icetools.icedata.processors.SupplierProcessor;
 import in.ua.icetools.icedata.resources.SupplierRepository;
-import in.ua.icetools.processors.SupplierProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -54,7 +54,7 @@ public class SupplierController {
         return ResponseEntity.ok().body(resultList);
     }
 
-    @PostMapping("/initSuppliers")
+    @PostMapping("/init")
     public ResponseEntity<String> initSuppliers(@Valid @RequestBody Properties properties) {
 
         String response = "Something went wrong";
