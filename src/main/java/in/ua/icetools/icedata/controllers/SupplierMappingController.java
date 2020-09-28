@@ -21,7 +21,7 @@ public class SupplierMappingController {
     SupplierMappingRepository supplierMappingRepository;
 
     @PostMapping("/init")
-    public ResponseEntity<String> initSuppliers(@Valid @RequestBody Properties properties) {
+    public ResponseEntity<String> initSupplierMappings(@Valid @RequestBody Properties properties) {
         String response = "Something went wrong";
         try {
             SupplierMappingProcessor processor = new SupplierMappingProcessor(
