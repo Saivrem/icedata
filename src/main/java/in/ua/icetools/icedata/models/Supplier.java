@@ -1,9 +1,7 @@
 package in.ua.icetools.icedata.models;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "suppliers")
@@ -18,6 +16,10 @@ public class Supplier {
     private int isSponsor;
     @Column(name = "brand_logo")
     private String brandLogo;
+
+    @OneToMany
+    @JoinColumn(name = "supplier_id", referencedColumnName = "supplier_id")
+    private List<SupplierMapping> supplierMappingList;
 
     public Supplier() {
     }
@@ -61,5 +63,11 @@ public class Supplier {
         this.supplierId = supplier_id;
     }
 
+    public List<SupplierMapping> getSupplierMappingList() {
+        return supplierMappingList;
+    }
 
+    public void setSupplierMappingList(List<SupplierMapping> supplierMappingList) {
+        this.supplierMappingList = supplierMappingList;
+    }
 }

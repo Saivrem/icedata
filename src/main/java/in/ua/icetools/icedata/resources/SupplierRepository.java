@@ -10,6 +10,7 @@ import java.util.List;
 
 @Repository
 public interface SupplierRepository extends JpaRepository<Supplier, Long> {
-    @Query(value = "SELECT * FROM suppliers s WHERE s.supplier_name = :name", nativeQuery = true)
+
+    @Query(value = "select s from Supplier s where s.supplierName = :name")
     List<Supplier> findSupplierByName(@Param("name") String name);
 }

@@ -15,14 +15,14 @@ public class SupplierMapping {
     private long supplierId;
 
     @Column(name = "m_supplier_name")
-    private String mSupplierName;
+    private String mappedSupplierName;
 
     public SupplierMapping() {
     }
 
-    public SupplierMapping(long supplierId, String mSupplierName) {
+    public SupplierMapping(long supplierId, String mappedSupplierName) {
         this.supplierId = supplierId;
-        this.mSupplierName = mSupplierName;
+        this.mappedSupplierName = mappedSupplierName;
     }
 
     public long getSupplierId() {
@@ -34,12 +34,13 @@ public class SupplierMapping {
     }
 
     public String getMSupplierName() {
-        return mSupplierName;
+        return mappedSupplierName;
     }
 
     public void setMSupplierName(String mSupplierName) {
-        this.mSupplierName = mSupplierName;
+        this.mappedSupplierName = mSupplierName;
     }
+
 }
 
 
