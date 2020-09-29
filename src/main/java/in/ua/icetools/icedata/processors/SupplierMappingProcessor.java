@@ -67,7 +67,7 @@ public class SupplierMappingProcessor {
                     totalCounter++;
                 }
 
-                if (counter == 3000 || !reader.ready()) {
+                if (counter == 3000) {
                     repository.saveAll(mappingsList);
                     mappingsList = new ArrayList<>();
                     counter = 0;
@@ -75,6 +75,8 @@ public class SupplierMappingProcessor {
                 }
 
             }
+            repository.saveAll(mappingsList);
+            System.out.printf("\rNumber of processed supplier mappings: %d", totalCounter);
         } catch (Exception e) {
             e.printStackTrace();
         }

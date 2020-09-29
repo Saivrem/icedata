@@ -49,6 +49,7 @@ public class SupplierProcessor {
         unGzip(suppliersFile, resultFile);
 
         int suppliersReadCounter = 0;
+        int totalCounter = 0;
         List<Supplier> supplierList = new ArrayList<>();
 
         try (BufferedReader reader = new BufferedReader(new FileReader(resultFile))) {
@@ -66,17 +67,21 @@ public class SupplierProcessor {
                     supplierList.add(supplier);
 
                     suppliersReadCounter++;
+                    totalCounter++;
 
-                    if (suppliersReadCounter == 3000 || !reader.ready()) {
+                    if (suppliersReadCounter == 3000) {
                         supplierRepository.saveAll(supplierList);
-                        System.out.printf("\rRead %d suppliers", suppliersReadCounter);
+                        supplierList = new ArrayList<>();
+                        suppliersReadCounter = 0;
+                        System.out.printf("\rRead %d suppliers", totalCounter);
                     }
                 }
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
-        System.out.printf("\rRead %d suppliers\n", suppliersReadCounter);
+        supplierRepository.saveAll(supplierList);
+        System.out.printf("\rRead %d suppliers\n", totalCounter);
 
         //This could be actually a lie, think how to provide valid data.
         return String.format("%d suppliers saved to DB", suppliersReadCounter);
