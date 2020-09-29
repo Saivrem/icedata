@@ -12,15 +12,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.validation.Valid;
-import java.net.URL;
+import java.util.Date;
 import java.util.Properties;
 
 @Controller
 @RequestMapping("api/v1/general")
 public class GeneralController {
 
-    private final static String suppliersListUrl = "https://data.icecat.biz/export/freexml/refs/SuppliersList.xml.gz";
-    private final static String supplierMappingUrl = "https://data.icecat.biz/export/level4/EN/supplier_mapping.xml";
     @Autowired
     SupplierRepository supplierRepository;
     @Autowired
@@ -28,7 +26,7 @@ public class GeneralController {
 
     @PostMapping("/init")
     public ResponseEntity<String> init(@Valid @RequestBody Properties properties) {
-
+        System.out.println("start " + new Date().toString());
         String response = "Something went wrong";
 
         String userName = properties.getProperty("userName");
@@ -46,11 +44,13 @@ public class GeneralController {
 
         try {
             response = String.format("%s\n%s",
-                    supplierProcessor.process(new URL(suppliersListUrl)),
-                    supplierMappingProcessor.process(new URL(supplierMappingUrl)));
+                    supplierProcessor.process(),
+                    supplierMappingProcessor.process());
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        System.out.println("\nend " + new Date().toString());
 
         return ResponseEntity.ok().body(response);
 

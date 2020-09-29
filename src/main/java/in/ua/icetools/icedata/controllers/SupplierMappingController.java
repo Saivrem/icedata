@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
-import java.net.URL;
 import java.util.Properties;
 
 @RestController
@@ -29,7 +28,7 @@ public class SupplierMappingController {
                     properties.getProperty("userName"),
                     properties.getProperty("passWord")
             );
-            response = processor.process(new URL(properties.getProperty("url")));
+            response = processor.process();
         } catch (Exception e) {
             e.printStackTrace();
         }

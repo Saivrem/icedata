@@ -8,11 +8,10 @@ import java.io.File;
 import java.io.FileReader;
 import java.net.Authenticator;
 import java.net.PasswordAuthentication;
-import java.net.URL;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.LinkedHashMap;
 
+import static in.ua.icetools.icedata.constants.RepositoryLinks.SUPPLIER_MAPPING_URL;
 import static in.ua.icetools.icedata.processors.Utils.downloadURL;
 import static in.ua.icetools.icedata.processors.Utils.readAttribute;
 
@@ -30,14 +29,14 @@ public class SupplierMappingProcessor {
         });
     }
 
-    public String process(URL url) throws Exception {
-        System.out.println("start " + new Date().toString());
+    public String process() throws Exception {
         repository.truncate();
 
-        //url.openConnection();
-        File supplierMappingsFile = new File("supplierMappingsFile");
+        File supplierMappingsFile = new File("supplierMappingsFile.tmp");
+        supplierMappingsFile.deleteOnExit();
+
         int totalCounter = 0;
-        downloadURL(url, supplierMappingsFile);
+        downloadURL(SUPPLIER_MAPPING_URL, supplierMappingsFile);
 
         try (BufferedReader reader = new BufferedReader(new FileReader(supplierMappingsFile))) {
             boolean item = false;
@@ -79,8 +78,7 @@ public class SupplierMappingProcessor {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        supplierMappingsFile.delete();
-        System.out.println("\nend " + new Date().toString());
+
         return String.format("%d supplier mappings saved to repository", totalCounter);
     }
 }

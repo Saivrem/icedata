@@ -9,7 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -64,7 +63,7 @@ public class SupplierController {
                     properties.getProperty("userName"),
                     properties.getProperty("passWord")
             );
-            response = processor.process(new URL(properties.getProperty("url")));
+            response = processor.process();
         } catch (Exception e) {
             e.printStackTrace();
         }

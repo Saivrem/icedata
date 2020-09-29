@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.util.LinkedHashMap;
@@ -74,10 +75,11 @@ public class Utils {
     /**
      * Downloads URL contents
      *
-     * @param url        input URL
+     * @param link       String URL
      * @param outputFile output file
      */
-    public static void downloadURL(URL url, File outputFile) {
+    public static void downloadURL(String link, File outputFile) throws MalformedURLException {
+        URL url = new URL(link);
         try (InputStream stream = url.openStream()) {
             Files.copy(stream, outputFile.toPath());
         } catch (IOException e) {
