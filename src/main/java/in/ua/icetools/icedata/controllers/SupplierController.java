@@ -1,6 +1,6 @@
 package in.ua.icetools.icedata.controllers;
 
-import in.ua.icetools.icedata.exceptions.ResourceNotFoundException;
+import in.ua.icetools.icedata.dto.SupplierDTO;
 import in.ua.icetools.icedata.models.Supplier;
 import in.ua.icetools.icedata.processors.SupplierProcessor;
 import in.ua.icetools.icedata.resources.SupplierRepository;
@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 
@@ -20,31 +21,28 @@ public class SupplierController {
     @Autowired
     private SupplierRepository supplierRepository;
 
-    @GetMapping("/all")
+    /*@GetMapping("/all")
     public List<Supplier> getAllSuppliers() {
         return supplierRepository.findAll();
-    }
+    }*/
 
-    @GetMapping("/id={id}")
-    public ResponseEntity<Supplier> getSupplierById(@PathVariable(value = "id") Long supplier_id) throws ResourceNotFoundException {
-        Supplier supplier = supplierRepository.findById(supplier_id).orElseThrow(() -> new ResourceNotFoundException("Supplier not found for this id :: " + supplier_id));
-        return ResponseEntity.ok().body(supplier);
+    @GetMapping("/ids")
+    @ResponseBody
+    public ResponseEntity<List<SupplierDTO>> getSuppliersInBatch(@RequestParam List<Long> id) {
+        List<SupplierDTO> resultList = new ArrayList<>();
+        for (Supplier supplier : supplierRepository.findAllById(id)) {
+            resultList.add(new SupplierDTO(supplier, false));
+        }
+        return ResponseEntity.ok().body(resultList);
     }
 
     @GetMapping("/name={name}")
-    public ResponseEntity<List<Supplier>> getSupplierByName(@PathVariable(value = "name") String supplierName) {
-        List<Supplier> suppliers = supplierRepository.findSupplierByName(supplierName);
-        return ResponseEntity.ok().body(suppliers);
-    }
-
-    @GetMapping("/ids={string}")
-    public ResponseEntity<List<Supplier>> getSuppliersInBatch(@PathVariable(value = "string") String line) {
-        List<Long> ids = new ArrayList<>();
-        for (String str : line.split(",")) {
-            ids.add(Long.parseLong(str));
+    public ResponseEntity<List<SupplierDTO>> getSupplierByName(@PathVariable(value = "name") String supplierName) {
+        List<SupplierDTO> result = new ArrayList<>();
+        for (Supplier supplier : supplierRepository.findSupplierByName(Arrays.asList(supplierName.split(",")))) {
+            result.add(new SupplierDTO(supplier, false));
         }
-        List<Supplier> resultList = supplierRepository.findAllById(ids);
-        return ResponseEntity.ok().body(resultList);
+        return ResponseEntity.ok().body(result);
     }
 
     @PostMapping("/")
@@ -68,6 +66,20 @@ public class SupplierController {
             e.printStackTrace();
         }
         return ResponseEntity.ok().body(response);
+    }
+
+    @PostMapping("/name")
+    public ResponseEntity<List<SupplierDTO>> getSuppliersByNamesWithMappings(@Valid @RequestBody Properties properties) {
+        String[] names = properties.getProperty("names").split(",");
+        boolean withMappings = Boolean.parseBoolean(properties.getProperty("mappings"));
+
+        List<Supplier> suppliers = supplierRepository.findSupplierByName(Arrays.asList(names));
+        List<SupplierDTO> result = new ArrayList<>();
+        for (Supplier supplier : suppliers) {
+            result.add(new SupplierDTO(supplier, withMappings));
+        }
+
+        return ResponseEntity.ok().body(result);
     }
 
     @PutMapping("/")

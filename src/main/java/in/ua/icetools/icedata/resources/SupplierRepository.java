@@ -11,6 +11,7 @@ import java.util.List;
 @Repository
 public interface SupplierRepository extends JpaRepository<Supplier, Long> {
 
-    @Query(value = "select s from Supplier s where s.supplierName = :name")
-    List<Supplier> findSupplierByName(@Param("name") String name);
+    @Query(value = "select s from Supplier s where s.supplierName in :name")
+    List<Supplier> findSupplierByName(@Param("name") Iterable<String> name);
+
 }
