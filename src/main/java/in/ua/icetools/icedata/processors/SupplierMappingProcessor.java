@@ -25,6 +25,7 @@ public class SupplierMappingProcessor {
         repository.truncate();
 
         File supplierMappingsFile = new File("supplierMappingsFile.tmp");
+        System.out.printf("File removal status is: %s\n", supplierMappingsFile.delete());
         supplierMappingsFile.deleteOnExit();
 
         int totalCounter = 0;

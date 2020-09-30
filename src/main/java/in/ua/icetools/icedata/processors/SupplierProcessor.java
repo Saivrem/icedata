@@ -34,6 +34,8 @@ public class SupplierProcessor {
     public String process() throws Exception {
         File suppliersFile = new File("gzippedSuppliersFile.tmp");
         File resultFile = new File("unzippedSuppliersFile.tmp");
+        System.out.printf("File removal status is: %s\n", suppliersFile.delete());
+        System.out.printf("File removal status is: %s\n", resultFile.delete());
         suppliersFile.deleteOnExit();
         resultFile.deleteOnExit();
 
