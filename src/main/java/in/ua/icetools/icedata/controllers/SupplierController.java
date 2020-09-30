@@ -21,12 +21,7 @@ public class SupplierController {
     @Autowired
     private SupplierRepository supplierRepository;
 
-    /*@GetMapping("/all")
-    public List<Supplier> getAllSuppliers() {
-        return supplierRepository.findAll();
-    }*/
-
-    @GetMapping("/ids")
+    @GetMapping("/id")
     @ResponseBody
     public ResponseEntity<List<SupplierDTO>> getSuppliersInBatch(@RequestParam List<Long> id) {
         List<SupplierDTO> resultList = new ArrayList<>();
@@ -36,7 +31,7 @@ public class SupplierController {
         return ResponseEntity.ok().body(resultList);
     }
 
-    @GetMapping("/name={name}")
+    @GetMapping("/getByNames={name}")
     public ResponseEntity<List<SupplierDTO>> getSupplierByName(@PathVariable(value = "name") String supplierName) {
         List<SupplierDTO> result = new ArrayList<>();
         for (Supplier supplier : supplierRepository.findSupplierByName(Arrays.asList(supplierName.split(",")))) {
@@ -68,7 +63,7 @@ public class SupplierController {
         return ResponseEntity.ok().body(response);
     }
 
-    @PostMapping("/name")
+    @PostMapping("/getByNames")
     public ResponseEntity<List<SupplierDTO>> getSuppliersByNamesWithMappings(@Valid @RequestBody Properties properties) {
         String[] names = properties.getProperty("names").split(",");
         boolean withMappings = Boolean.parseBoolean(properties.getProperty("mappings"));

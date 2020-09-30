@@ -6,14 +6,11 @@ import in.ua.icetools.icedata.resources.SupplierMappingRepository;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
-import java.net.Authenticator;
-import java.net.PasswordAuthentication;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
 import static in.ua.icetools.icedata.constants.RepositoryLinks.SUPPLIER_MAPPING_URL;
-import static in.ua.icetools.icedata.processors.Utils.downloadURL;
-import static in.ua.icetools.icedata.processors.Utils.readAttribute;
+import static in.ua.icetools.icedata.processors.Utils.*;
 
 public class SupplierMappingProcessor {
 
@@ -21,12 +18,7 @@ public class SupplierMappingProcessor {
 
     public SupplierMappingProcessor(SupplierMappingRepository repository, String userName, String passWord) {
         this.repository = repository;
-        Authenticator.setDefault(new Authenticator() {
-            @Override
-            protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication(userName, passWord.toCharArray());
-            }
-        });
+        authenticate(userName, passWord);
     }
 
     public String process() throws Exception {
@@ -81,6 +73,6 @@ public class SupplierMappingProcessor {
             e.printStackTrace();
         }
 
-        return String.format("%d supplier mappings saved to repository", totalCounter);
+        return String.format("%d supplier mappings saved to repository", repository.count());
     }
 }

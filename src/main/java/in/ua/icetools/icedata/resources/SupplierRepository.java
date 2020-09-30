@@ -14,4 +14,7 @@ public interface SupplierRepository extends JpaRepository<Supplier, Long> {
     @Query(value = "select s from Supplier s where s.supplierName in :name")
     List<Supplier> findSupplierByName(@Param("name") Iterable<String> name);
 
+    @Query(value = "select count(*) from `suppliers`", nativeQuery = true)
+    long count();
+
 }

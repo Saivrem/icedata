@@ -7,8 +7,6 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.net.Authenticator;
-import java.net.PasswordAuthentication;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -21,16 +19,11 @@ import static in.ua.icetools.icedata.processors.Utils.*;
  */
 public class SupplierProcessor {
 
-    private final SupplierRepository supplierRepository;
+    private final SupplierRepository repository;
 
-    public SupplierProcessor(SupplierRepository supplierRepository, String userName, String passWord) {
-        this.supplierRepository = supplierRepository;
-        Authenticator.setDefault(new Authenticator() {
-            @Override
-            protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication(userName, passWord.toCharArray());
-            }
-        });
+    public SupplierProcessor(SupplierRepository repository, String userName, String passWord) {
+        this.repository = repository;
+        authenticate(userName, passWord);
     }
 
     /**
@@ -39,7 +32,6 @@ public class SupplierProcessor {
      * @return String with the response, Either everything went good or not
      */
     public String process() throws Exception {
-        //TODO rework path1 and path2 to be temporary files in system native TMP dir
         File suppliersFile = new File("gzippedSuppliersFile.tmp");
         File resultFile = new File("unzippedSuppliersFile.tmp");
         suppliersFile.deleteOnExit();
@@ -70,7 +62,7 @@ public class SupplierProcessor {
                     totalCounter++;
 
                     if (suppliersReadCounter == 3000) {
-                        supplierRepository.saveAll(supplierList);
+                        repository.saveAll(supplierList);
                         supplierList = new ArrayList<>();
                         suppliersReadCounter = 0;
                         System.out.printf("\rRead %d suppliers", totalCounter);
@@ -80,11 +72,10 @@ public class SupplierProcessor {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        supplierRepository.saveAll(supplierList);
+        repository.saveAll(supplierList);
         System.out.printf("\rRead %d suppliers\n", totalCounter);
 
-        //This could be actually a lie, think how to provide valid data.
-        return String.format("%d suppliers saved to DB", suppliersReadCounter);
+        return String.format("%d suppliers saved to DB", repository.count());
 
     }
 

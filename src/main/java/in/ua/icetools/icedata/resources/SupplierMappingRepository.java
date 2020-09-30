@@ -12,6 +12,9 @@ import javax.transaction.Transactional;
 public interface SupplierMappingRepository extends JpaRepository<SupplierMapping, Long> {
     @Modifying
     @Transactional
-    @Query(value = "TRUNCATE TABLE supplier_mappings", nativeQuery = true)
+    @Query(value = "TRUNCATE TABLE `supplier_mappings`", nativeQuery = true)
     void truncate();
+
+    @Query(value = "select count(*) from `supplier_mappings`", nativeQuery = true)
+    long count();
 }
