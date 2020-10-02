@@ -43,14 +43,15 @@ public class GeneralController {
         );
 
         try {
-            response = String.format("%s\n%s",
+            response = String.format("\n%s\n%s\n",
                     supplierProcessor.process(),
                     supplierMappingProcessor.process());
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        System.out.println("\nend " + new Date().toString());
+        System.out.println(response);
+        System.out.println("end " + new Date().toString());
 
         return ResponseEntity.ok().body(response);
 

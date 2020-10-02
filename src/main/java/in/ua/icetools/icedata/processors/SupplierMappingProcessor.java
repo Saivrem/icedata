@@ -25,8 +25,6 @@ public class SupplierMappingProcessor {
         repository.truncate();
 
         File supplierMappingsFile = new File("supplierMappingsFile.tmp");
-        System.out.printf("File removal status is: %s\n", supplierMappingsFile.delete());
-        supplierMappingsFile.deleteOnExit();
 
         int totalCounter = 0;
         downloadURL(SUPPLIER_MAPPING_URL, supplierMappingsFile);
@@ -69,11 +67,12 @@ public class SupplierMappingProcessor {
 
             }
             repository.saveAll(mappingsList);
-            System.out.printf("\rNumber of processed supplier mappings: %d", totalCounter);
+            System.out.printf("\rNumber of processed supplier mappings: %d\n", totalCounter);
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        return String.format("%d supplier mappings saved to repository", repository.count());
+        System.out.printf("File removal status is: %s\n", supplierMappingsFile.delete());
+        return String.format("%d supplier mappings saved to DB", repository.count());
     }
 }

@@ -34,10 +34,6 @@ public class SupplierProcessor {
     public String process() throws Exception {
         File suppliersFile = new File("gzippedSuppliersFile.tmp");
         File resultFile = new File("unzippedSuppliersFile.tmp");
-        System.out.printf("File removal status is: %s\n", suppliersFile.delete());
-        System.out.printf("File removal status is: %s\n", resultFile.delete());
-        suppliersFile.deleteOnExit();
-        resultFile.deleteOnExit();
 
         downloadURL(SUPPLIERS_LIST_URL, suppliersFile);
         unGzip(suppliersFile, resultFile);
@@ -67,7 +63,7 @@ public class SupplierProcessor {
                         repository.saveAll(supplierList);
                         supplierList = new ArrayList<>();
                         suppliersReadCounter = 0;
-                        System.out.printf("\rRead %d suppliers", totalCounter);
+                        System.out.printf("\rNumber of processed suppliers: %d", totalCounter);
                     }
                 }
             }
@@ -75,8 +71,10 @@ public class SupplierProcessor {
             e.printStackTrace();
         }
         repository.saveAll(supplierList);
-        System.out.printf("\rRead %d suppliers\n", totalCounter);
+        System.out.printf("\rNumber of processed suppliers: %d\n", totalCounter);
 
+        System.out.printf("suppliersFile File removed: %s\n", suppliersFile.delete());
+        System.out.printf("resultFile File removed: %s\n", resultFile.delete());
         return String.format("%d suppliers saved to DB", repository.count());
 
     }
