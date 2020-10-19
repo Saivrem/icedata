@@ -12,9 +12,9 @@ public class InvalidXmlTagStructureException extends Exception {
 
     @Override
     public String toString() {
-        return "InvalidXmlTagStructureException{\n" +
-                "line='" + line + '\'' + ",\n" +
-                "cause='" + cause + '\'' + "\n" +
+        return "InvalidXmlTagStructureException {\n" +
+                "\tline='" + line + '\'' + ",\n" +
+                "\tcause='" + cause + '\'' + "\n" +
                 '}';
     }
 }
