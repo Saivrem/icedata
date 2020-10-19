@@ -1,24 +1,52 @@
 package in.ua.icetools.icedata.processors;
 
+import in.ua.icetools.icedata.exceptions.InvalidXmlTagStructureException;
 import org.junit.jupiter.api.Test;
 
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 class UtilsTest {
 
-    @Test
-    void readAttribute() {
+    private static final HashMap<String, String> testCases = new HashMap<>();
+    private static final LinkedHashMap<String, String> expectedMap = new LinkedHashMap<>();
+    private static final LinkedHashMap<String, String> expectedMapForException = new LinkedHashMap<>();
 
-        String toTest = "<Tag attr1=\"One\" attr2=\"Two\">";
-        LinkedHashMap<String, String> resultMap = new LinkedHashMap<>();
+    static {
+        testCases.put("positive", "<Tag attr1=\"simple\" attr2=\"with spaces within\" attr3=\"with ;amp&\">");
+        testCases.put("exception", "<Tag attr1=\"simple\" attr2=\"with\" quotes within\" attr3=\"with ;amp&\">");
 
-        resultMap.put("attr1", "One");
-        resultMap.put("attr2", "Two");
+        expectedMap.put("attr1", "simple");
+        expectedMap.put("attr2", "with spaces within");
+        expectedMap.put("attr3", "with ;amp&");
 
-        assertEquals(resultMap, Utils.readAttribute(toTest));
-        System.out.println("Done");
-
+        expectedMapForException.put("attr1", "simple");
+        expectedMapForException.put("attr2", "with");
+        expectedMapForException.put("quotes within\" attr3", "with ;amp&");
     }
+
+    @Test()
+    void readAttributeException() {
+        try {
+            assertEquals(expectedMapForException, Utils.readAttribute(testCases.get("exception")));
+            fail("InvalidXmlTagStructureException expected");
+        } catch (InvalidXmlTagStructureException ex) {
+            System.out.println("Exception thrown successfully");
+            ex.printStackTrace();
+        }
+    }
+
+    @Test
+    void readAttributeSuccess() {
+        try {
+            assertEquals(expectedMap, Utils.readAttribute(testCases.get("positive")));
+            System.out.println("Positive case successful");
+        } catch (InvalidXmlTagStructureException ex) {
+            fail("Positive case failed");
+        }
+    }
+
 }

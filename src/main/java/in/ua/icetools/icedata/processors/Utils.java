@@ -1,5 +1,7 @@
 package in.ua.icetools.icedata.processors;
 
+import in.ua.icetools.icedata.exceptions.InvalidXmlTagStructureException;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -23,10 +25,11 @@ public class Utils {
      * @param line input line with XML tag
      * @return LinkedHashMap with attributes in the same order they've been read from the string
      */
-    public static LinkedHashMap<String, String> readAttribute(String line) {
+    public static LinkedHashMap<String, String> readAttribute(String line) throws InvalidXmlTagStructureException {
 
         char[] array = line.toCharArray();
         LinkedHashMap<String, String> attributes = new LinkedHashMap<>();
+
         StringBuilder name = new StringBuilder();
         StringBuilder value = new StringBuilder();
         boolean isName = true;
@@ -37,7 +40,9 @@ public class Utils {
                 opening = !(array[i] == ' ');
             } else {
                 if (isName) {
-                    if (array[i] != '=') {
+                    if (array[i] == '\"') {
+                        throw new InvalidXmlTagStructureException(line, "Structure is broken");
+                    } else if (array[i] != '=') {
                         name.append(array[i]);
                     } else {
                         isName = false;
@@ -48,7 +53,7 @@ public class Utils {
                     } else if ((array[i] == '\"') && isValue) {
                         isName = true;
                         isValue = false;
-                        attributes.put(name.toString().trim(), value.toString().replaceAll("\"", "").trim());
+                        attributes.put(name.toString().trim(), value.toString().trim()); //.replaceAll("\"", "").trim());
                         name = new StringBuilder();
                         value = new StringBuilder();
                     } else {
