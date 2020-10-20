@@ -21,16 +21,11 @@ public class SupplierMappingController {
 
     @PostMapping("/init")
     public ResponseEntity<String> initSupplierMappings(@Valid @RequestBody Properties properties) {
-        String response = "Something went wrong";
+        String response = "Done";
         try {
-            SupplierMappingProcessor processor = new SupplierMappingProcessor(
-                    supplierMappingRepository,
-                    properties.getProperty("userName"),
-                    properties.getProperty("passWord")
-            );
-            response = processor.process();
+            supplierMappingRepository.saveAll(SupplierMappingProcessor.process());
         } catch (Exception e) {
-            e.printStackTrace();
+            response = e.getMessage();
         }
         return ResponseEntity.ok().body(response);
     }

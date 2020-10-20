@@ -3,6 +3,7 @@ package in.ua.icetools.icedata.controllers;
 import in.ua.icetools.icedata.dto.SupplierDTO;
 import in.ua.icetools.icedata.models.Supplier;
 import in.ua.icetools.icedata.processors.SupplierProcessor;
+import in.ua.icetools.icedata.processors.Utils;
 import in.ua.icetools.icedata.resources.SupplierRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -49,16 +50,12 @@ public class SupplierController {
     @PostMapping("/init")
     public ResponseEntity<String> initSuppliers(@Valid @RequestBody Properties properties) {
 
-        String response = "Something went wrong";
+        String response = "Done";
         try {
-            SupplierProcessor processor = new SupplierProcessor(
-                    supplierRepository,
-                    properties.getProperty("userName"),
-                    properties.getProperty("passWord")
-            );
-            response = processor.process();
+            Utils.authenticate(properties.getProperty("userName"), properties.getProperty("passWord"));
+            supplierRepository.saveAll(SupplierProcessor.process(false, null));
         } catch (Exception e) {
-            e.printStackTrace();
+            response = e.getMessage();
         }
         return ResponseEntity.ok().body(response);
     }

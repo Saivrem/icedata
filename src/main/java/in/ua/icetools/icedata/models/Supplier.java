@@ -1,10 +1,15 @@
 package in.ua.icetools.icedata.models;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 import java.util.List;
 
 @Entity
 @Table(name = "suppliers")
+@Data
+@NoArgsConstructor
 public class Supplier {
 
     @Id
@@ -20,9 +25,6 @@ public class Supplier {
     @OneToMany
     @JoinColumn(name = "supplier_id", referencedColumnName = "supplier_id")
     private List<SupplierMapping> supplierMappingList;
-
-    public Supplier() {
-    }
 
     public Supplier(Long supplierId, String supplierName, int isSponsor, String brandLogo) {
         this.supplierId = supplierId;

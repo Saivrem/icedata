@@ -1,41 +1,33 @@
 package in.ua.icetools.icedata.processors;
 
 import in.ua.icetools.icedata.models.SupplierMapping;
-import in.ua.icetools.icedata.resources.SupplierMappingRepository;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 
 import static in.ua.icetools.icedata.constants.RepositoryLinks.SUPPLIER_MAPPING_URL;
-import static in.ua.icetools.icedata.processors.Utils.*;
+import static in.ua.icetools.icedata.processors.Utils.downloadURL;
+import static in.ua.icetools.icedata.processors.Utils.readAttribute;
 
 public class SupplierMappingProcessor {
 
-    private final SupplierMappingRepository repository;
-
-    public SupplierMappingProcessor(SupplierMappingRepository repository, String userName, String passWord) {
-        this.repository = repository;
-        authenticate(userName, passWord);
-    }
-
-    public String process() throws Exception {
-        repository.truncate();
+    public static List<SupplierMapping> process() throws Exception {
 
         File supplierMappingsFile = new File("supplierMappingsFile.tmp");
 
-        int totalCounter = 0;
         downloadURL(SUPPLIER_MAPPING_URL, supplierMappingsFile);
+        List<SupplierMapping> mappingsList = new ArrayList<>();
 
         try (BufferedReader reader = new BufferedReader(new FileReader(supplierMappingsFile))) {
             boolean item = false;
             int supplierId = 0;
-            int counter = 0;
 
             LinkedHashMap<String, String> list;
-            ArrayList<SupplierMapping> mappingsList = new ArrayList<>();
+
 
             while (reader.ready()) {
                 String line = reader.readLine().trim();
@@ -54,25 +46,12 @@ public class SupplierMappingProcessor {
                     name = name.replaceAll("&amp;", "&");
                     name = name.toLowerCase();
                     mappingsList.add(new SupplierMapping(supplierId, name));
-                    counter++;
-                    totalCounter++;
                 }
-
-                if (counter == 3000) {
-                    repository.saveAll(mappingsList);
-                    mappingsList = new ArrayList<>();
-                    counter = 0;
-                    System.out.printf("\rNumber of processed supplier mappings: %d", totalCounter);
-                }
-
             }
-            repository.saveAll(mappingsList);
-            System.out.printf("\rNumber of processed supplier mappings: %d\n", totalCounter);
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        System.out.printf("File removal status is: %s\n", supplierMappingsFile.delete());
-        return String.format("%d supplier mappings saved to DB", repository.count());
+        return mappingsList;
     }
 }
