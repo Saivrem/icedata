@@ -7,7 +7,10 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name = "suppliers")
+@Table(name = "suppliers", indexes = {
+        @Index(name = "supplier_id", columnList = "supplier_id", unique = true),
+        @Index(name = "supplier_name", columnList = "supplier_name")
+})
 @Data
 @NoArgsConstructor
 public class Supplier {

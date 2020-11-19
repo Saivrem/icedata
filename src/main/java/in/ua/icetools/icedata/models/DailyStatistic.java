@@ -3,10 +3,7 @@ package in.ua.icetools.icedata.models;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.Date;
 
 @Entity
@@ -16,6 +13,7 @@ import java.util.Date;
 public class DailyStatistic {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", unique = true)
     private Long id;
     @Column(name = "lang_code")
@@ -24,7 +22,9 @@ public class DailyStatistic {
     private String repository;
     @Column(name = "last_modified")
     private Date lastModified;
-    @Column(name = "flag")
+    @Column(name = "flag", columnDefinition = " varchar(10) default 'good'")
     private String status;
+    @Column(name = "type")
+    private String type;
 
 }

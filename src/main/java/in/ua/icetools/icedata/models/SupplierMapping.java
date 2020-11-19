@@ -3,7 +3,10 @@ package in.ua.icetools.icedata.models;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "supplier_mappings")
+@Table(name = "supplier_mappings", indexes = {
+        @Index(name = "supplier_id", columnList = "supplier_id"),
+        @Index(name = "m_supplier_name", columnList = "m_supplier_name")
+})
 public class SupplierMapping {
 
     @Id

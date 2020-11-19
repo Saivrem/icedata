@@ -22,6 +22,7 @@ class UtilsTest {
         expectedMap.put("attr1", "simple");
         expectedMap.put("attr2", "with spaces within");
         expectedMap.put("attr3", "with ;amp&");
+        expectedMap.put("tag", "Tag");
 
         expectedMapForException.put("attr1", "simple");
         expectedMapForException.put("attr2", "with");

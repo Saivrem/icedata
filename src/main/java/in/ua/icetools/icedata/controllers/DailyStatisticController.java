@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,14 +22,10 @@ public class DailyStatisticController {
     @Autowired
     private DailyStatisticRepository dailyStatisticRepository;
 
-    @GetMapping("/month={month}/day={day}/repo={repo}")
+    @GetMapping("/month={month}/day={day}")
     public ResponseEntity<List<DailyStatisticDTO>> getStatistic(@Valid @PathVariable(value = "month") Integer month,
-                                                                @Valid @PathVariable(value = "day") Integer day,
-                                                                @Valid @PathVariable(value = "repo") String repo) {
-        SimpleDateFormat sdf = new SimpleDateFormat("dd");
-        //Integer today = Integer.parseInt(sdf.format(new Date()));
-
-        List<DailyStatistic> response = dailyStatisticRepository.getDailyStatistic(month, day, repo);
+                                                                @Valid @PathVariable(value = "day") Integer day) {
+        List<DailyStatistic> response = dailyStatisticRepository.getDailyStatistic(month, day);
         List<DailyStatisticDTO> resultList = new ArrayList<>();
         for (DailyStatistic dailyStatistic : response) {
             resultList.add(new DailyStatisticDTO(dailyStatistic));

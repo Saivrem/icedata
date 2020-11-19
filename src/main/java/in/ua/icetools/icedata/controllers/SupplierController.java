@@ -23,7 +23,7 @@ public class SupplierController {
     private SupplierRepository supplierRepository;
 
     @GetMapping("/id")
-    @ResponseBody
+    @ResponseBody //todo check why I've put this here.
     public ResponseEntity<List<SupplierDTO>> getSuppliersInBatch(@RequestParam List<Long> id) {
         List<SupplierDTO> resultList = new ArrayList<>();
         for (Supplier supplier : supplierRepository.findAllById(id)) {
@@ -49,7 +49,6 @@ public class SupplierController {
 
     @PostMapping("/init")
     public ResponseEntity<String> initSuppliers(@Valid @RequestBody Properties properties) {
-
         String response = "Done";
         try {
             Utils.authenticate(properties.getProperty("userName"), properties.getProperty("passWord"));

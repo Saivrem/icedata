@@ -12,11 +12,10 @@ import java.util.List;
 public interface DailyStatisticRepository extends JpaRepository<DailyStatistic, Long> {
 
     /**
-     * @param month      Integer month
-     * @param day        Integer day
-     * @param repository String repository
+     * @param month Integer month
+     * @param day   Integer day
      * @return List of DailyStatistic objects
      */
-    @Query(value = "select * from daily_statistics where month(last_modified) = :month and day(last_modified) = :day and repo = :repository", nativeQuery = true)
-    List<DailyStatistic> getDailyStatistic(@Param("month") int month, @Param("day") int day, @Param("repository") String repository);
+    @Query(value = "select * from daily_statistics where month(last_modified) = :month and day(last_modified) = :day", nativeQuery = true)
+    List<DailyStatistic> getDailyStatistic(@Param("month") int month, @Param("day") int day);
 }

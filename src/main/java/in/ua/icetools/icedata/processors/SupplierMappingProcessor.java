@@ -18,6 +18,7 @@ public class SupplierMappingProcessor {
     public static List<SupplierMapping> process() throws Exception {
 
         File supplierMappingsFile = new File("supplierMappingsFile.tmp");
+        supplierMappingsFile.delete();
 
         downloadURL(SUPPLIER_MAPPING_URL, supplierMappingsFile);
         List<SupplierMapping> mappingsList = new ArrayList<>();

@@ -29,7 +29,7 @@ public class Utils {
 
         char[] array = line.toCharArray();
         LinkedHashMap<String, String> attributes = new LinkedHashMap<>();
-
+        StringBuilder tagName = new StringBuilder();
         StringBuilder name = new StringBuilder();
         StringBuilder value = new StringBuilder();
         boolean isName = true;
@@ -38,6 +38,7 @@ public class Utils {
         for (int i = 0; i < array.length; i++) {
             if (opening) {
                 opening = !(array[i] == ' ');
+                tagName.append(array[i]);
             } else {
                 if (isName) {
                     if (array[i] == '\"') {
@@ -53,7 +54,7 @@ public class Utils {
                     } else if ((array[i] == '\"') && isValue) {
                         isName = true;
                         isValue = false;
-                        attributes.put(name.toString().trim(), value.toString().trim()); //.replaceAll("\"", "").trim());
+                        attributes.put(name.toString().trim(), value.toString().trim());
                         name = new StringBuilder();
                         value = new StringBuilder();
                     } else {
@@ -62,6 +63,7 @@ public class Utils {
                 }
             }
         }
+        attributes.put("tag", tagName.toString().trim().replaceAll("<", ""));
         return attributes;
     }
 
