@@ -17,4 +17,6 @@ public interface SupplierRepository extends JpaRepository<Supplier, Long> {
     @Query(value = "select count(*) from `suppliers`", nativeQuery = true)
     long count();
 
+    @Query(value = "select * from suppliers s join supplier_mappings sm on s.supplier_id = sm.supplier_id where sm.m_supplier_name= :mName", nativeQuery = true)
+    Supplier getSupplierByMappedName(@Param("mName") String mName);
 }

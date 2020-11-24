@@ -26,13 +26,22 @@ public class DailyStatisticController {
     public ResponseEntity<List<DailyStatisticDTO>> getStatistic(@Valid @PathVariable(value = "month") Integer month,
                                                                 @Valid @PathVariable(value = "day") Integer day) {
         List<DailyStatistic> response = dailyStatisticRepository.getDailyStatistic(month, day);
+        return getListResponseEntity(response);
+    }
+
+    @GetMapping("/")
+    public ResponseEntity<List<DailyStatisticDTO>> getAllStatistic() {
+        List<DailyStatistic> data = dailyStatisticRepository.findAll();
+        return getListResponseEntity(data);
+    }
+
+    private ResponseEntity<List<DailyStatisticDTO>> getListResponseEntity(List<DailyStatistic> response) {
         List<DailyStatisticDTO> resultList = new ArrayList<>();
         for (DailyStatistic dailyStatistic : response) {
             resultList.add(new DailyStatisticDTO(dailyStatistic));
         }
         HttpHeaders responseHeaders = new HttpHeaders();
         responseHeaders.set("Access-Control-Allow-Origin", "*");
-
         return ResponseEntity.ok().headers(responseHeaders).body(resultList);
     }
 

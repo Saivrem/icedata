@@ -1,13 +1,11 @@
 package in.ua.icetools.icedata.controllers;
 
+import in.ua.icetools.icedata.models.SupplierMapping;
 import in.ua.icetools.icedata.processors.SupplierMappingProcessor;
 import in.ua.icetools.icedata.resources.SupplierMappingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.Properties;
@@ -28,5 +26,10 @@ public class SupplierMappingController {
             response = e.getMessage();
         }
         return ResponseEntity.ok().body(response);
+    }
+
+    @GetMapping("/byMName={name}")
+    public ResponseEntity<SupplierMapping> getSuplpierByMappedName(@Valid @PathVariable(value = "name") String mName) {
+        return ResponseEntity.ok().body(supplierMappingRepository.getByMName(mName));
     }
 }

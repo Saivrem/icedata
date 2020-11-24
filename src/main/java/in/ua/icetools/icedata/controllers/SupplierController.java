@@ -41,6 +41,12 @@ public class SupplierController {
         return ResponseEntity.ok().body(result);
     }
 
+    @GetMapping("/getByMName={name}")
+    public ResponseEntity<Supplier> getSupplierByMappedName(@PathVariable(value = "name") String mName) {
+        Supplier s = supplierRepository.getSupplierByMappedName(mName);
+        return ResponseEntity.ok().body(s);
+    }
+
     @PostMapping("/")
     public ResponseEntity<List<Supplier>> getSuppliersById(@Valid @RequestBody List<Long> ids) {
         List<Supplier> resultList = supplierRepository.findAllById(ids);
