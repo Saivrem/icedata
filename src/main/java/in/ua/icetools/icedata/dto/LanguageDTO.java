@@ -8,7 +8,7 @@ public class LanguageDTO {
     private final String langCode;
     private final String langName;
 
-    public LanguageDTO(String langCode, String langName) {
+    public LanguageDTO(long langId, String langCode, String langName) {
         this.langCode = langCode;
         this.langName = langName;
     }

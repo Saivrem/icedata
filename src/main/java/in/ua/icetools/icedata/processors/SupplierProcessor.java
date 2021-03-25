@@ -25,8 +25,8 @@ public class SupplierProcessor {
     public static List<Supplier> process(boolean test, File testFile) throws Exception {
 
         File resultFile = test ? testFile : new File("unzippedSuppliersFile.tmp");
-        resultFile.delete();
         if (!test) {
+            resultFile.delete();
             File suppliersFile = new File("gzippedSuppliersFile.tmp");
             suppliersFile.delete();
             downloadURL(SUPPLIERS_LIST_URL, suppliersFile);

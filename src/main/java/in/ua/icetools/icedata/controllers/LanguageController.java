@@ -47,7 +47,7 @@ public class LanguageController {
         List<Language> languages = languageRepository.findAll();
         List<LanguageDTO> result = new ArrayList<>();
         for (Language language : languages) {
-            result.add(new LanguageDTO(language.getCode(), language.getName()));
+            result.add(new LanguageDTO(language.getLangId(), language.getCode(), language.getName()));
         }
         HttpHeaders headers = new HttpHeaders();
         headers.set("Access-Control-Allow-Origin", "*");
