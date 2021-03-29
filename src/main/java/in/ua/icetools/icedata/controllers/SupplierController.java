@@ -1,11 +1,13 @@
 package in.ua.icetools.icedata.controllers;
 
 import in.ua.icetools.icedata.dto.SupplierDTO;
+import in.ua.icetools.icedata.dto.SupplierNamesDTO;
 import in.ua.icetools.icedata.models.Supplier;
 import in.ua.icetools.icedata.processors.SupplierProcessor;
 import in.ua.icetools.icedata.processors.Utils;
 import in.ua.icetools.icedata.resources.SupplierRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,6 +23,32 @@ public class SupplierController {
 
     @Autowired
     private SupplierRepository supplierRepository;
+
+    @GetMapping("/all")
+    public ResponseEntity<List<SupplierDTO>> getAllSuppliers() {
+        List<SupplierDTO> allSuppliers = new ArrayList<>();
+        for (Supplier supplier : supplierRepository.findAll()) {
+            allSuppliers.add(new SupplierDTO(supplier, false));
+        }
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Access-Control-Allow-Origin", "*");
+
+        return ResponseEntity.ok().headers(headers).body(allSuppliers);
+    }
+
+    @GetMapping("/allNames")
+    public ResponseEntity<List<SupplierNamesDTO>> getAllSupplierNames() {
+        List<SupplierNamesDTO> allSuppliers = new ArrayList<>();
+        for (Supplier supplier : supplierRepository.findAll()) {
+            allSuppliers.add(new SupplierNamesDTO(supplier));
+        }
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Access-Control-Allow-Origin", "*");
+
+        return ResponseEntity.ok().headers(headers).body(allSuppliers);
+    }
 
     @GetMapping("/id")
     @ResponseBody //todo check why I've put this here.
