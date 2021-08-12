@@ -15,10 +15,7 @@ import static in.ua.icetools.icedata.processors.Utils.readAttribute;
 
 public class LanguageProcessor {
 
-/*    @Autowired
-    static LanguageNameRepository languageNameRepository;*/
-
-    private static List<LanguageName> namesList = new ArrayList<>();
+    private static final List<LanguageName> namesList = new ArrayList<>();
 
     public static List<LanguageName> getNamesList() {
         return namesList;
@@ -63,15 +60,11 @@ public class LanguageProcessor {
                     namesList.add(name);
                     break;
                 case "/Language>":
-                    //currentLanguage.setNames(namesList);
                     result.add(currentLanguage);
                     currentLanguage = new Language();
-                    //namesList = new ArrayList<>();
                     break;
             }
         }
-
-        //languageNameRepository.saveAll(namesList);
 
         return result;
     }

@@ -2,18 +2,18 @@ package in.ua.icetools.icedata.controllers;
 
 import in.ua.icetools.icedata.dto.DailyStatisticDTO;
 import in.ua.icetools.icedata.models.DailyStatistic;
+import in.ua.icetools.icedata.processors.DailyStatisticsProcessor;
+import in.ua.icetools.icedata.processors.Utils;
 import in.ua.icetools.icedata.resources.DailyStatisticRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 @RestController
 @RequestMapping("api/v1/statistic")
@@ -21,6 +21,8 @@ public class DailyStatisticController {
 
     @Autowired
     private DailyStatisticRepository dailyStatisticRepository;
+    @Autowired
+    private DailyStatisticsProcessor processor;
 
     @GetMapping("/month={month}/day={day}")
     public ResponseEntity<List<DailyStatisticDTO>> getStatistic(@Valid @PathVariable(value = "month") Integer month,
@@ -43,6 +45,26 @@ public class DailyStatisticController {
         HttpHeaders responseHeaders = new HttpHeaders();
         responseHeaders.set("Access-Control-Allow-Origin", "*");
         return ResponseEntity.ok().headers(responseHeaders).body(resultList);
+    }
+
+    @PostMapping("/init")
+    public ResponseEntity<String> init(@Valid @RequestBody Properties properties) {
+        String response = "Done";
+
+        String userName = properties.getProperty("userName");
+        String passWord = properties.getProperty("passWord");
+
+        Utils.authenticate(userName, passWord);
+
+        try {
+
+            dailyStatisticRepository.saveAll(processor.init());
+
+        } catch (Exception e) {
+            response = e.getMessage();
+        }
+
+        return ResponseEntity.ok().body(response);
     }
 
 }

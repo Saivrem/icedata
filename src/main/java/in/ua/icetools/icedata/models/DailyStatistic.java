@@ -27,4 +27,9 @@ public class DailyStatistic {
     @Column(name = "type")
     private String type;
 
+    public DailyStatistic(String langCode, String repository, String type) {
+        this.langCode = langCode;
+        this.repository = repository;
+        this.type = type;
+    }
 }
