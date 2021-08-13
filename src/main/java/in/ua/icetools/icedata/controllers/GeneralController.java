@@ -31,6 +31,12 @@ public class GeneralController {
     @Autowired
     LanguageNameRepository languageNameRepository;
 
+    /**
+     * Method to init all tables implemented
+     *
+     * @param properties receives username and password in properties object
+     * @return String value "Done" for good and error message for other options
+     */
     @PostMapping("/init")
     public ResponseEntity<String> init(@Valid @RequestBody Properties properties) {
 

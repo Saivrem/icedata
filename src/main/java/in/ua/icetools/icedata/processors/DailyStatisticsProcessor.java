@@ -55,13 +55,13 @@ public class DailyStatisticsProcessor {
                 System.out.printf("Asked %s%n", link.getFile());
                 String currentTime = tableFormat.format(inDate);
                 statistic.setLastModified(inDate);
-                statistic.setStatus("Good");
+                statistic.setStatus("good");
                 System.out.printf("Processed %s\nDate: %s%n", link, currentTime);
             } catch (NullPointerException | ParseException e) {
                 inDate = new Date();
                 System.out.printf("Null value %s%n", link.getFile());
                 statistic.setLastModified(inDate);
-                statistic.setStatus("Bad");
+                statistic.setStatus("bad");
             }
             statistics.add(statistic);
         }

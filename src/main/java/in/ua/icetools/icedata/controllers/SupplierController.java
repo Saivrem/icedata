@@ -24,6 +24,11 @@ public class SupplierController {
     @Autowired
     private SupplierRepository supplierRepository;
 
+    /**
+     * Important!!! This method returns suppliers without mappings
+     *
+     * @return List of all suppliers without Mappings
+     */
     @GetMapping("/all")
     public ResponseEntity<List<SupplierDTO>> getAllSuppliers() {
         List<SupplierDTO> allSuppliers = new ArrayList<>();
