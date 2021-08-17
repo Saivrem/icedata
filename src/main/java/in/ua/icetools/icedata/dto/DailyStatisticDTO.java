@@ -1,6 +1,6 @@
 package in.ua.icetools.icedata.dto;
 
-import in.ua.icetools.icedata.models.DailyStatistic;
+import in.ua.icetools.icedata.models.v1.DailyStatistic;
 import lombok.Data;
 
 import java.text.SimpleDateFormat;

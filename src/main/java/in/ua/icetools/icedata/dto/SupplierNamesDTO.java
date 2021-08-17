@@ -1,6 +1,6 @@
 package in.ua.icetools.icedata.dto;
 
-import in.ua.icetools.icedata.models.Supplier;
+import in.ua.icetools.icedata.models.v1.Supplier;
 import lombok.Data;
 
 @Data

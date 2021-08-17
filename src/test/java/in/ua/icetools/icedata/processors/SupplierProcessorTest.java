@@ -1,6 +1,7 @@
 package in.ua.icetools.icedata.processors;
 
-import in.ua.icetools.icedata.models.Supplier;
+import in.ua.icetools.icedata.models.v1.Supplier;
+import in.ua.icetools.icedata.processors.v1.SupplierProcessor;
 import org.junit.jupiter.api.Test;
 
 import java.io.BufferedWriter;

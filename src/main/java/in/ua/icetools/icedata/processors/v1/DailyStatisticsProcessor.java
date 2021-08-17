@@ -1,9 +1,10 @@
-package in.ua.icetools.icedata.processors;
+package in.ua.icetools.icedata.processors.v1;
 
-import in.ua.icetools.icedata.models.DailyStatistic;
-import in.ua.icetools.icedata.models.Language;
-import in.ua.icetools.icedata.resources.DailyStatisticRepository;
-import in.ua.icetools.icedata.resources.LanguageRepository;
+import in.ua.icetools.icedata.models.v1.DailyStatistic;
+import in.ua.icetools.icedata.models.v1.OldLanguage;
+import in.ua.icetools.icedata.processors.HttpRequest;
+import in.ua.icetools.icedata.repositories.v1.DailyStatisticRepository;
+import in.ua.icetools.icedata.repositories.v1.OldLanguageRepository;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -19,11 +20,11 @@ public class DailyStatisticsProcessor {
     final
     DailyStatisticRepository dailyStatisticRepository;
     final
-    LanguageRepository languageRepository;
+    OldLanguageRepository oldLanguageRepository;
 
-    public DailyStatisticsProcessor(DailyStatisticRepository dailyStatisticRepository, LanguageRepository languageRepository) {
+    public DailyStatisticsProcessor(DailyStatisticRepository dailyStatisticRepository, OldLanguageRepository oldLanguageRepository) {
         this.dailyStatisticRepository = dailyStatisticRepository;
-        this.languageRepository = languageRepository;
+        this.oldLanguageRepository = oldLanguageRepository;
     }
 
 
@@ -74,9 +75,9 @@ public class DailyStatisticsProcessor {
         List<URL> result = new ArrayList<>();
         String[] repo = {"freexml", "level4"};
         String[] extension = {".xml.gz", ".csv.gz"};
-        List<Language> allLanguages = languageRepository.findAll();
+        List<OldLanguage> allOldLanguages = oldLanguageRepository.findAll();
 
-        for (Language lang : allLanguages) {
+        for (OldLanguage lang : allOldLanguages) {
             for (String rep : repo) {
                 for (String ext : extension) {
                     result.add(new URL(String.format("https://data.icecat.biz/export/%s/%s/daily.index%s",

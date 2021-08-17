@@ -1,4 +1,4 @@
-package in.ua.icetools.icedata.models;
+package in.ua.icetools.icedata.models.v1;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

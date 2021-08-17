@@ -1,6 +1,6 @@
-package in.ua.icetools.icedata.resources;
+package in.ua.icetools.icedata.repositories.v1;
 
-import in.ua.icetools.icedata.models.DailyStatistic;
+import in.ua.icetools.icedata.models.v1.DailyStatistic;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;

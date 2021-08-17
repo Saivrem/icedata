@@ -1,7 +1,7 @@
-package in.ua.icetools.icedata.controllers;
+package in.ua.icetools.icedata.controllers.v1;
 
-import in.ua.icetools.icedata.processors.SupplierMappingProcessor;
-import in.ua.icetools.icedata.resources.SupplierMappingRepository;
+import in.ua.icetools.icedata.processors.v1.SupplierMappingProcessor;
+import in.ua.icetools.icedata.repositories.v1.SupplierMappingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;

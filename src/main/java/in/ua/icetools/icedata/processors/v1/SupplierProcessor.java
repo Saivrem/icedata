@@ -1,6 +1,6 @@
-package in.ua.icetools.icedata.processors;
+package in.ua.icetools.icedata.processors.v1;
 
-import in.ua.icetools.icedata.models.Supplier;
+import in.ua.icetools.icedata.models.v1.Supplier;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -29,8 +29,8 @@ public class SupplierProcessor {
             resultFile.delete();
             File suppliersFile = new File("gzippedSuppliersFile.tmp");
             suppliersFile.delete();
-            downloadURL(SUPPLIERS_LIST_URL, suppliersFile);
-            unGzip(suppliersFile, resultFile);
+            oldDownloadURL(SUPPLIERS_LIST_URL, suppliersFile);
+            oldUnGzip(suppliersFile, resultFile);
         }
 
         List<Supplier> supplierList = new ArrayList<>();

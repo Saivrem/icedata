@@ -1,11 +1,11 @@
-package in.ua.icetools.icedata.controllers;
+package in.ua.icetools.icedata.controllers.v1;
 
 import in.ua.icetools.icedata.dto.SupplierDTO;
 import in.ua.icetools.icedata.dto.SupplierNamesDTO;
-import in.ua.icetools.icedata.models.Supplier;
-import in.ua.icetools.icedata.processors.SupplierProcessor;
+import in.ua.icetools.icedata.models.v1.Supplier;
 import in.ua.icetools.icedata.processors.Utils;
-import in.ua.icetools.icedata.resources.SupplierRepository;
+import in.ua.icetools.icedata.processors.v1.SupplierProcessor;
+import in.ua.icetools.icedata.repositories.v1.SupplierRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;

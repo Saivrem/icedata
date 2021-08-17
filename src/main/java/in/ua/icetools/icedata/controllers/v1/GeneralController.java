@@ -1,13 +1,13 @@
-package in.ua.icetools.icedata.controllers;
+package in.ua.icetools.icedata.controllers.v1;
 
-import in.ua.icetools.icedata.processors.LanguageProcessor;
-import in.ua.icetools.icedata.processors.SupplierMappingProcessor;
-import in.ua.icetools.icedata.processors.SupplierProcessor;
 import in.ua.icetools.icedata.processors.Utils;
-import in.ua.icetools.icedata.resources.LanguageNameRepository;
-import in.ua.icetools.icedata.resources.LanguageRepository;
-import in.ua.icetools.icedata.resources.SupplierMappingRepository;
-import in.ua.icetools.icedata.resources.SupplierRepository;
+import in.ua.icetools.icedata.processors.v1.OldLanguageProcessor;
+import in.ua.icetools.icedata.processors.v1.SupplierMappingProcessor;
+import in.ua.icetools.icedata.processors.v1.SupplierProcessor;
+import in.ua.icetools.icedata.repositories.v1.OldLanguageNameRepository;
+import in.ua.icetools.icedata.repositories.v1.OldLanguageRepository;
+import in.ua.icetools.icedata.repositories.v1.SupplierMappingRepository;
+import in.ua.icetools.icedata.repositories.v1.SupplierRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -27,9 +27,9 @@ public class GeneralController {
     @Autowired
     SupplierMappingRepository supplierMappingRepository;
     @Autowired
-    LanguageRepository languageRepository;
+    OldLanguageRepository oldLanguageRepository;
     @Autowired
-    LanguageNameRepository languageNameRepository;
+    OldLanguageNameRepository oldLanguageNameRepository;
 
     /**
      * Method to init all tables implemented
@@ -50,8 +50,8 @@ public class GeneralController {
             supplierRepository.saveAll(SupplierProcessor.process(false, null));
             supplierMappingRepository.truncate();
             supplierMappingRepository.saveAll(SupplierMappingProcessor.process());
-            languageRepository.saveAll(LanguageProcessor.process(false, null));
-            languageNameRepository.saveAll(LanguageProcessor.getNamesList());
+            oldLanguageRepository.saveAll(OldLanguageProcessor.process(false, null));
+            oldLanguageNameRepository.saveAll(OldLanguageProcessor.getNamesList());
         } catch (Exception e) {
             response = e.getMessage();
         }

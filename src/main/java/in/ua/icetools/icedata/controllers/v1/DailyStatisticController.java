@@ -1,10 +1,10 @@
-package in.ua.icetools.icedata.controllers;
+package in.ua.icetools.icedata.controllers.v1;
 
 import in.ua.icetools.icedata.dto.DailyStatisticDTO;
-import in.ua.icetools.icedata.models.DailyStatistic;
-import in.ua.icetools.icedata.processors.DailyStatisticsProcessor;
+import in.ua.icetools.icedata.models.v1.DailyStatistic;
 import in.ua.icetools.icedata.processors.Utils;
-import in.ua.icetools.icedata.resources.DailyStatisticRepository;
+import in.ua.icetools.icedata.processors.v1.DailyStatisticsProcessor;
+import in.ua.icetools.icedata.repositories.v1.DailyStatisticRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;

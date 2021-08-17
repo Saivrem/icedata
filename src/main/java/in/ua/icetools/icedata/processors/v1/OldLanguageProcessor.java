@@ -1,7 +1,8 @@
-package in.ua.icetools.icedata.processors;
+package in.ua.icetools.icedata.processors.v1;
 
-import in.ua.icetools.icedata.models.Language;
-import in.ua.icetools.icedata.models.LanguageName;
+import in.ua.icetools.icedata.models.v1.OldLanguage;
+import in.ua.icetools.icedata.models.v1.OldLanguageName;
+import in.ua.icetools.icedata.processors.Utils;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -13,15 +14,15 @@ import java.util.Map;
 import static in.ua.icetools.icedata.constants.RepositoryLinks.LANGUAGES_LIST_URL;
 import static in.ua.icetools.icedata.processors.Utils.readAttribute;
 
-public class LanguageProcessor {
+public class OldLanguageProcessor {
 
-    private static final List<LanguageName> namesList = new ArrayList<>();
+    private static final List<OldLanguageName> namesList = new ArrayList<>();
 
-    public static List<LanguageName> getNamesList() {
+    public static List<OldLanguageName> getNamesList() {
         return namesList;
     }
 
-    public static List<Language> process(boolean test, File testFile) throws Exception {
+    public static List<OldLanguage> process(boolean test, File testFile) throws Exception {
 
         //todo  move such code parts into some method "prepareFile"
         File resultFile = test ? testFile : new File("unzippedLanguagesListFile.tmp");
@@ -29,15 +30,15 @@ public class LanguageProcessor {
         if (!test) {
             File zippedLanguagesFile = new File("gzippedLanguagesFile.tmp");
             zippedLanguagesFile.delete();
-            Utils.downloadURL(LANGUAGES_LIST_URL, zippedLanguagesFile);
-            Utils.unGzip(zippedLanguagesFile, resultFile);
+            Utils.oldDownloadURL(LANGUAGES_LIST_URL, zippedLanguagesFile);
+            Utils.oldUnGzip(zippedLanguagesFile, resultFile);
 
         }
 
-        List<Language> result = new ArrayList<>();
+        List<OldLanguage> result = new ArrayList<>();
 
         BufferedReader reader = new BufferedReader(new FileReader(resultFile));
-        Language currentLanguage = new Language();
+        OldLanguage currentOldLanguage = new OldLanguage();
         Map<String, String> attributes;
 
         while (reader.ready()) {
@@ -48,20 +49,20 @@ public class LanguageProcessor {
             attributes = readAttribute(line);
             switch (attributes.get("tag")) {
                 case "Language":
-                    currentLanguage.setCode(attributes.get("ShortCode"));
-                    currentLanguage.setName(attributes.get("Code"));
-                    currentLanguage.setLangId(Long.parseLong(attributes.get("ID")));
+                    currentOldLanguage.setCode(attributes.get("ShortCode"));
+                    currentOldLanguage.setName(attributes.get("Code"));
+                    currentOldLanguage.setLangId(Long.parseLong(attributes.get("ID")));
                     break;
                 case "Name":
-                    LanguageName name = new LanguageName();
+                    OldLanguageName name = new OldLanguageName();
                     name.setName(attributes.get("Value"));
                     name.setNameLangId(Integer.parseInt(attributes.get("langid")));
-                    name.setNameOwnerLangId(currentLanguage.getLangId());
+                    name.setNameOwnerLangId(currentOldLanguage.getLangId());
                     namesList.add(name);
                     break;
                 case "/Language>":
-                    result.add(currentLanguage);
-                    currentLanguage = new Language();
+                    result.add(currentOldLanguage);
+                    currentOldLanguage = new OldLanguage();
                     break;
             }
         }

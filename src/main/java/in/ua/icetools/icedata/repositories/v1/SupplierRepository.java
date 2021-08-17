@@ -1,6 +1,6 @@
-package in.ua.icetools.icedata.resources;
+package in.ua.icetools.icedata.repositories.v1;
 
-import in.ua.icetools.icedata.models.Supplier;
+import in.ua.icetools.icedata.models.v1.Supplier;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
