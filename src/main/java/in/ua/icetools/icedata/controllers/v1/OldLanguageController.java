@@ -1,12 +1,13 @@
 package in.ua.icetools.icedata.controllers.v1;
 
 import in.ua.icetools.icedata.dto.LanguageDTO;
-import in.ua.icetools.icedata.models.v1.OldLanguage;
 import in.ua.icetools.icedata.models.v1.OldLanguageName;
+import in.ua.icetools.icedata.models.v2.Language;
 import in.ua.icetools.icedata.processors.Utils;
 import in.ua.icetools.icedata.processors.v1.OldLanguageProcessor;
 import in.ua.icetools.icedata.repositories.v1.OldLanguageNameRepository;
 import in.ua.icetools.icedata.repositories.v1.OldLanguageRepository;
+import in.ua.icetools.icedata.repositories.v2.LanguageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +26,8 @@ public class OldLanguageController {
     private OldLanguageRepository oldLanguageRepository;
     @Autowired
     private OldLanguageNameRepository oldLanguageNameRepository;
+    @Autowired
+    private LanguageRepository languageRepository;
 
     @PostMapping("/init")
     public ResponseEntity<String> initLanguages(@Valid @RequestBody Properties properties) {
@@ -44,10 +47,10 @@ public class OldLanguageController {
 
     @GetMapping("/")
     public ResponseEntity<List<LanguageDTO>> getLanguageCodes() {
-        List<OldLanguage> oldLanguages = oldLanguageRepository.findAll();
         List<LanguageDTO> result = new ArrayList<>();
-        for (OldLanguage oldLanguage : oldLanguages) {
-            result.add(new LanguageDTO(oldLanguage.getLangId(), oldLanguage.getCode(), oldLanguage.getName()));
+        for (Language lang : languageRepository.findAll()) {
+            LanguageDTO dto = new LanguageDTO(lang.getLangId(), lang.getShortCode(), lang.getIntLangName());
+            result.add(dto);
         }
         HttpHeaders headers = new HttpHeaders();
         headers.set("Access-Control-Allow-Origin", "*");

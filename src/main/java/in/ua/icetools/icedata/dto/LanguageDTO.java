@@ -14,4 +14,5 @@ public class LanguageDTO {
         this.langCode = langCode;
         this.langName = langName;
     }
+
 }
